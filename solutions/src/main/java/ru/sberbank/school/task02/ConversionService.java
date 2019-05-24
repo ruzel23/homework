@@ -1,5 +1,6 @@
 package ru.sberbank.school.task02;
 
+import lombok.Getter;
 import ru.sberbank.school.task02.util.ClientOperation;
 import ru.sberbank.school.task02.util.Quote;
 import ru.sberbank.school.task02.util.Symbol;
@@ -7,7 +8,7 @@ import ru.sberbank.school.task02.util.Symbol;
 import java.math.BigDecimal;
 import java.util.List;
 
-
+@Getter
 public class ConversionService implements FxConversionService {
 
     private ExternalQuotesService externalQuotesService;
@@ -38,7 +39,7 @@ public class ConversionService implements FxConversionService {
         return getNearQuoteOfVolume(quotes, amount);
     }
 
-    private Quote getNearQuoteOfVolume(List<Quote> quotes, BigDecimal amount) {
+    protected Quote getNearQuoteOfVolume(List<Quote> quotes, BigDecimal amount) {
         Quote nearQuote = null;
         Quote infQuote = null;
         int i;
@@ -68,14 +69,10 @@ public class ConversionService implements FxConversionService {
                 }
             }
         }
-        if (nearQuote == null) {
-            return infQuote;
-        } else {
-            return nearQuote;
-        }
+        return (nearQuote == null)? infQuote : nearQuote;
     }
 
-    private BigDecimal getPrice(ClientOperation operation, Quote quote) {
+    protected BigDecimal getPrice(ClientOperation operation, Quote quote) {
         switch (operation) {
             case BUY:
                 return quote.getOffer();

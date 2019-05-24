@@ -3,7 +3,9 @@ package ru.sberbank.school.task02;
 import ru.sberbank.school.task02.util.ClientOperation;
 import ru.sberbank.school.task02.util.Symbol;
 
+import javax.swing.plaf.synth.SynthOptionPaneUI;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 
 public class Main {
     public static void main(String[] args) {
@@ -12,7 +14,7 @@ public class Main {
         ServiceFactoryImpl serviceFactoryImpl = new ServiceFactoryImpl();
         FxConversionService conversionService = serviceFactoryImpl.getFxConversionService(myExternalQuotesService);
 
-        System.out.println(conversionService.convert(ClientOperation.BUY,
+   /*     System.out.println(conversionService.convert(ClientOperation.BUY,
                 Symbol.USD_RUB,
                 BigDecimal.valueOf(0)));
         System.out.println(conversionService.convert(ClientOperation.BUY,
@@ -29,6 +31,12 @@ public class Main {
                 BigDecimal.valueOf(1)));
         System.out.println(conversionService.convert(ClientOperation.BUY,
                 Symbol.USD_RUB,
-                BigDecimal.valueOf(1_000_000_000)));
+                BigDecimal.valueOf(1_000_000_000)));*/
+
+        BigDecimal bigDecimal = new BigDecimal(25000);
+        BigDecimal bigDecimal1 = new BigDecimal(53);
+        System.out.println(bigDecimal.divide(bigDecimal));
+        System.out.println(bigDecimal.divide(bigDecimal1));
+
     }
 }
