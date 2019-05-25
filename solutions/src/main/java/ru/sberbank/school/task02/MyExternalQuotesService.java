@@ -17,13 +17,12 @@ public class MyExternalQuotesService implements ExternalQuotesService {
             throw new WrongSymbolException("Cross symbols are not supported!");
         }
         return asList(
-                buildQuote(symbol, 80, 10),
-                buildQuote(symbol, 102_423, 8),
-                buildQuote(symbol, 1, 6),
-                buildQuote(symbol, -1, 5),
-                buildQuote(symbol, 10_000, 4),
-                buildQuote(symbol, 1_000_000, 6),
-                buildQuote(symbol, 4902, 8)
+                buildQuote(symbol, 1000, 12),
+                buildQuote(symbol, 500, 10),
+                buildQuote(symbol, 1200, 8),
+                buildQuote(symbol, 100, 4),
+                buildQuote(symbol, -1, 6),
+                buildQuote(symbol, 800, 2)
         );
     }
 
@@ -31,8 +30,8 @@ public class MyExternalQuotesService implements ExternalQuotesService {
         return Quote.builder()
                 .symbol(symbol)
                 .volume(Volume.from(volume))
-                .bid(BigDecimal.valueOf(80 - spread / 2))
-                .offer(BigDecimal.valueOf(80 + spread / 2))
+                .bid(BigDecimal.valueOf(48 + spread / 2))
+                .offer(BigDecimal.valueOf(48 + spread / 2))
                 .build();
     }
 }

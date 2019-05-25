@@ -1,48 +1,57 @@
 package ru.sberbank.school.task02;
 
-import org.graalvm.compiler.lir.aarch64.AArch64AddressValue;
-import ru.sberbank.school.task02.util.Beneficiary;
-import ru.sberbank.school.task02.util.ClientOperation;
-import ru.sberbank.school.task02.util.Quote;
-import ru.sberbank.school.task02.util.Symbol;
+
+import ru.sberbank.school.task02.util.*;
 
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.Optional;
+import java.math.RoundingMode;
+import java.util.*;
 
 public class ExtendedConversionService extends ConversionService implements ExtendedFxConversionService {
 
-    public ExtendedConversionService(ExternalQuotesService externalQuotesService) {
+    ExtendedConversionService(ExternalQuotesService externalQuotesService) {
         super(externalQuotesService);
     }
 
     @Override
     public Optional<BigDecimal> convertReversed(ClientOperation operation, Symbol symbol, BigDecimal amount, Beneficiary beneficiary) {
-        return Optional.empty();
+        if (amount.compareTo(BigDecimal.ZERO) == 0) {
+            return Optional.of(BigDecimal.ZERO);
+        }
+        List<BigDecimal> foundPrices = getPriceList(operation, symbol, amount);
+        BigDecimal priceResult;
+        if (foundPrices.isEmpty()) {
+            return Optional.empty();
+        } else {
+            priceResult = getPriceBeneficiary(operation, foundPrices, beneficiary);
+            return Optional.of(BigDecimal.ONE.divide(priceResult, 10, RoundingMode.HALF_DOWN));
+        }
     }
 
-    private Quote getQuote(ClientOperation operation, Symbol symbol,BigDecimal amount) {
+    private List<BigDecimal> getPriceList(ClientOperation operation, Symbol symbol,BigDecimal amount) {
         List<Quote> quotes = getExternalQuotesService().getQuotes(symbol);
-        Quote prevQuote;
+        List<BigDecimal> foundPrices = new ArrayList<>();
         BigDecimal priceQuote;
+        BigDecimal amountCoverted;
         for (Quote quoteEl: quotes) {
             priceQuote = getPrice(operation, quoteEl);
-            if (amount.compareTo(quoteEl.getVolumeSize().divide(priceQuote)) < 0) {
-
+            amountCoverted = amount.divide(priceQuote, 100, RoundingMode.HALF_DOWN);
+            if (amountCoverted.compareTo(quoteEl.getVolumeSize()) < 0 || quoteEl.isInfinity()) {
+                if (quoteEl.getVolumeSize()
+                        .compareTo(getNearQuoteOfVolume(quotes, amountCoverted)
+                                .getVolumeSize()) == 0) {
+                    foundPrices.add(priceQuote);
+                }
             }
         }
-        return null;
+        return foundPrices;
     }
 
-    private Quote previousQouteAsc(Quote quote, BigDecimal amount, List<Quote> quotes) {
-        Quote nearQuote = null;
-        Quote infQuote = null;
-        for (Quote quoteEl: quotes) {
-
-        }
-        return null;
+    private BigDecimal getPriceBeneficiary(ClientOperation operation, List<BigDecimal> foundPrices, Beneficiary beneficiary) {
+        return (beneficiary == beneficiary.CLIENT && operation == operation.SELL ||
+                beneficiary == beneficiary.BANK && operation == operation.BUY)
+                ? Collections.max(foundPrices): Collections.min(foundPrices);
     }
-
 
     @Override
     public Optional<BigDecimal> convertReversed(ClientOperation operation, Symbol symbol, BigDecimal amount, double delta, Beneficiary beneficiary) {

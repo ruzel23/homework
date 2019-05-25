@@ -1,42 +1,58 @@
 package ru.sberbank.school.task02;
 
+import ru.sberbank.school.task02.util.Beneficiary;
 import ru.sberbank.school.task02.util.ClientOperation;
 import ru.sberbank.school.task02.util.Symbol;
 
-import javax.swing.plaf.synth.SynthOptionPaneUI;
+
 import java.math.BigDecimal;
-import java.math.BigInteger;
+
 
 public class Main {
     public static void main(String[] args) {
 
         ExternalQuotesService myExternalQuotesService = new MyExternalQuotesService();
         ServiceFactoryImpl serviceFactoryImpl = new ServiceFactoryImpl();
-        FxConversionService conversionService = serviceFactoryImpl.getFxConversionService(myExternalQuotesService);
+        ExtendedFxConversionService extendedConversionService = serviceFactoryImpl.getExtendedFxConversionService(myExternalQuotesService);
 
-   /*     System.out.println(conversionService.convert(ClientOperation.BUY,
+        System.out.println(extendedConversionService.convertReversed(ClientOperation.BUY,
                 Symbol.USD_RUB,
-                BigDecimal.valueOf(0)));
-        System.out.println(conversionService.convert(ClientOperation.BUY,
+                BigDecimal.valueOf(0), Beneficiary.CLIENT));
+        System.out.println(extendedConversionService.convertReversed(ClientOperation.BUY,
                 Symbol.USD_RUB,
-                BigDecimal.valueOf(80)));
-        System.out.println(conversionService.convert(ClientOperation.BUY,
+                BigDecimal.valueOf(400), Beneficiary.CLIENT));
+        System.out.println(extendedConversionService.convertReversed(ClientOperation.BUY,
                 Symbol.USD_RUB,
-                BigDecimal.valueOf(100)));
-        System.out.println(conversionService.convert(ClientOperation.BUY,
+                BigDecimal.valueOf(5000), Beneficiary.CLIENT));
+        System.out.println(extendedConversionService.convertReversed(ClientOperation.BUY,
                 Symbol.USD_RUB,
-                BigDecimal.valueOf(0.99999)));
-        System.out.println(conversionService.convert(ClientOperation.BUY,
+                BigDecimal.valueOf(25000), Beneficiary.CLIENT));
+        System.out.println(extendedConversionService.convertReversed(ClientOperation.BUY,
                 Symbol.USD_RUB,
-                BigDecimal.valueOf(1)));
-        System.out.println(conversionService.convert(ClientOperation.BUY,
+                BigDecimal.valueOf(68000), Beneficiary.CLIENT));
+        System.out.println(extendedConversionService.convertReversed(ClientOperation.BUY,
                 Symbol.USD_RUB,
-                BigDecimal.valueOf(1_000_000_000)));*/
+                BigDecimal.valueOf(5100), Beneficiary.CLIENT));
 
-        BigDecimal bigDecimal = new BigDecimal(25000);
-        BigDecimal bigDecimal1 = new BigDecimal(53);
-        System.out.println(bigDecimal.divide(bigDecimal));
-        System.out.println(bigDecimal.divide(bigDecimal1));
+        System.out.println(extendedConversionService.convertReversed(ClientOperation.BUY,
+                Symbol.USD_RUB,
+                BigDecimal.valueOf(0), Beneficiary.BANK));
+        System.out.println(extendedConversionService.convertReversed(ClientOperation.BUY,
+                Symbol.USD_RUB,
+                BigDecimal.valueOf(400), Beneficiary.BANK));
+        System.out.println(extendedConversionService.convertReversed(ClientOperation.BUY,
+                Symbol.USD_RUB,
+                BigDecimal.valueOf(5000), Beneficiary.BANK));
+        System.out.println(extendedConversionService.convertReversed(ClientOperation.BUY,
+                Symbol.USD_RUB,
+                BigDecimal.valueOf(25000), Beneficiary.BANK));
+        System.out.println(extendedConversionService.convertReversed(ClientOperation.BUY,
+                Symbol.USD_RUB,
+                BigDecimal.valueOf(68000), Beneficiary.BANK));
+        System.out.println(extendedConversionService.convertReversed(ClientOperation.BUY,
+                Symbol.USD_RUB,
+                BigDecimal.valueOf(5100), Beneficiary.BANK));
+
 
     }
 }
