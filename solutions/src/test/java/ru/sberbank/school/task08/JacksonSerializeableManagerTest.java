@@ -1,7 +1,5 @@
 package ru.sberbank.school.task08;
 
-import com.google.common.io.Files;
-import org.junit.After;
 import org.junit.Assert;
 import ru.sberbank.school.task08.state.GameObject;
 import ru.sberbank.school.task08.state.InstantiatableEntity;
