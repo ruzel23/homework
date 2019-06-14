@@ -8,7 +8,8 @@ public class CountMapImpl implements CountMap<String> {
 
     private Integer count;
     private Map<String,Integer> countHashMap;
-    public CountMapImpl(){
+
+    public CountMapImpl() {
         countHashMap = new HashMap<>();
     }
 

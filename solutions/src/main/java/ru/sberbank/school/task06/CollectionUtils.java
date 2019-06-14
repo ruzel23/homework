@@ -33,7 +33,7 @@ public class CollectionUtils {
      * @return индекс элемента
      */
     public static <T> int indexOf(List<? extends T> source, T o) {
-       return source.indexOf(o);
+        return source.indexOf(o);
     }
 
     /**
@@ -87,8 +87,8 @@ public class CollectionUtils {
      * @return true, если хотя бы 1 элемент коллекции c2 содержатся в c1
      */
     public static boolean containsAny(List<?> c1, List<?> c2) {
-        for (Object o2 : c2){
-            if(c1.contains(o2)){
+        for (Object o2 : c2) {
+            if (c1.contains(o2)) {
                 return true;
             }
         }
@@ -127,7 +127,7 @@ public class CollectionUtils {
      */
     public static <T> List range(List<? extends T> list, Object min, Object max, Comparator comparator) {
         ArrayList<T> result = new ArrayList<>();
-        for(T o : list) {
+        for (T o : list) {
             if (comparator.compare(o, min) >= 0 && comparator.compare(o, max) <= 0) {
                 result.add(o);
             }

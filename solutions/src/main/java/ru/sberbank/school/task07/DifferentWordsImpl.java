@@ -1,14 +1,22 @@
 package ru.sberbank.school.task07;
 
+import lombok.NonNull;
+
 import java.io.FileNotFoundException;
 import java.lang.reflect.Array;
 import java.util.*;
 
 public class DifferentWordsImpl implements DifferentWords<Set> {
-    @Override
-    public Set findSortedDifferentWords(String pathToFile) throws FileNotFoundException {
+    private FileParser fileParser;
 
-        List<String> list = new FileParserImpl().parse(pathToFile);
+    public DifferentWordsImpl(FileParser fileParser) {
+        this.fileParser = fileParser;
+    }
+
+    @Override
+    public Set findSortedDifferentWords(@NonNull String pathToFile) throws FileNotFoundException {
+
+        List<String> stringsFile = fileParser.parse(pathToFile);
         Comparator<String> comparator = (o1, o2) -> {
             if (o1.length() > o2.length()) {
                 return 1;
@@ -20,7 +28,7 @@ public class DifferentWordsImpl implements DifferentWords<Set> {
         };
 
         Set<String> set = new TreeSet<>(comparator);
-        for (String str : list) {
+        for (String str : stringsFile) {
             set.addAll(Arrays.asList(str.trim().toLowerCase().split(" ")));
         }
         return set;
