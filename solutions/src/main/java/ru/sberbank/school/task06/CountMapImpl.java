@@ -42,8 +42,8 @@ public class CountMapImpl implements CountMap<String> {
         Set<String> keySource = toMapSource.keySet();
         for (String key: keySource) {
             Integer volSource = toMapSource.get(key);
-            Integer volCHM = countHashMap.getOrDefault(key, 0);
-            countHashMap.put(key, volSource + volCHM);
+            Integer volChm = countHashMap.getOrDefault(key, 0);
+            countHashMap.put(key, volSource + volChm);
         }
     }
 
