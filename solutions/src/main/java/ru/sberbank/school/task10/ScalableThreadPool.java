@@ -39,8 +39,8 @@ public class ScalableThreadPool implements ThreadPool {
     public void execute(Runnable runnable) {
         synchronized (tasks) {
             synchronized (threads) {
-                if (tasks.size() > threads.size() && tasks.size() <= maxSize) {
-                    threads.addLast(new ThreadWorker("ThreadPoolWorker-" + (tasks.size() - 1)));
+                if (tasks.isEmpty() && threads.size() < maxSize) {
+                    threads.addLast(new ThreadWorker("ThreadPoolWorker-" + (threads.size() - 1)));
                     threads.getLast().start();
                 }
                 if (tasks.size() < threads.size()) {
