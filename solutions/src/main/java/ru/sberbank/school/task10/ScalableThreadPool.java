@@ -18,9 +18,12 @@ public class ScalableThreadPool implements ThreadPool {
 
     @Override
     public void start() {
+        if (!threads.isEmpty()) {
+            throw new IllegalStateException("старт уже был произведен");
+        }
         for (int i = 0; i < minSize; i++) {
             threads.addLast(new ThreadWorker("ThreadPoolWorker-" + i));
-            threads.getFirst().start();
+            threads.getLast().start();
         }
     }
 
@@ -39,12 +42,9 @@ public class ScalableThreadPool implements ThreadPool {
     public void execute(Runnable runnable) {
         synchronized (tasks) {
             synchronized (threads) {
-                if (tasks.isEmpty() && threads.size() < maxSize) {
+                if (!(tasks.isEmpty()) && (threads.size() > minSize && threads.size() < maxSize)) {
                     threads.addLast(new ThreadWorker("ThreadPoolWorker-" + (threads.size() - 1)));
                     threads.getLast().start();
-                }
-                if (tasks.size() < threads.size()) {
-
                 }
                 tasks.add(runnable);
                 tasks.notify();
@@ -63,19 +63,25 @@ public class ScalableThreadPool implements ThreadPool {
             Runnable taskRun;
 
             synchronized (tasks) {
-                while (!Thread.interrupted()) {
+                while (!Thread.currentThread().isInterrupted()) {
                     if (tasks.isEmpty()) {
-                        try {
-                            tasks.wait();
-                        } catch (InterruptedException e) {
-
+                        synchronized (threads) {
+                            try {
+                                if (threads.size() > minSize) {
+                                    Thread.currentThread().interrupt();
+                                }
+                                tasks.wait();
+                            } catch (InterruptedException ex) {
+                                ex.printStackTrace();
+                            }
                         }
                     }
                 }
                 taskRun = tasks.poll();
             }
-
-            taskRun.run();
+            if (taskRun != null) {
+                taskRun.run();
+            }
         }
     }
 }

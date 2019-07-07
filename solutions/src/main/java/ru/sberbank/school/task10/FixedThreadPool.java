@@ -55,6 +55,14 @@ public class FixedThreadPool implements ThreadPool {
         }
     }
 
+    public void checkState() {
+        synchronized (threads) {
+            for(int i = 0; i < threads.length; i++) {
+                System.out.println(threads[i].getState());
+            }
+        }
+    }
+
     private class ThreadWorker extends Thread {
 
         ThreadWorker(String name) {
@@ -64,21 +72,22 @@ public class FixedThreadPool implements ThreadPool {
         @Override
         public void run() {
             Runnable taskRun;
-            while (!Thread.interrupted()) {
+            while (!Thread.currentThread().isInterrupted()) {
 
                 synchronized (tasks) {
+
                     if (tasks.isEmpty()) {
                         try {
                             tasks.wait();
                         } catch (InterruptedException e) {
-                           // e.printStackTrace();
+
                         }
                     }
-
                     taskRun = tasks.poll();
                 }
-
-                taskRun.run();
+                if (taskRun != null) {
+                    taskRun.run();
+                }
             }
         }
     }
