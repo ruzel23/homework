@@ -7,7 +7,7 @@ import org.junit.Test;
 
 public class TestScalableThreadPool {
 
-    private ThreadPool pool;
+    private ScalableThreadPool pool;
     private final Object lock = new Object();
     private volatile int count;
 
@@ -31,7 +31,7 @@ public class TestScalableThreadPool {
                 }
             });
         }
-        Thread.sleep(1000);
+        Thread.sleep(3000);
         Assertions.assertEquals(1000000, count);
     }
 

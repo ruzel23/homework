@@ -36,7 +36,7 @@ public class TestFixedThreadPool {
             });
         }
         Thread.sleep(1000);
-        pool.checkState();
+
         Assertions.assertEquals(1000000, count);
     }
 
@@ -45,20 +45,23 @@ public class TestFixedThreadPool {
         for (int i = 0; i < 100; i++) {
             pool.execute(() -> {
                 synchronized (lock) {
-                    if (Thread.currentThread().getName().equals("ThreadPoolWorker-1")) {
+                    if (Thread.currentThread().getName().equals("ThreadPoolWorker-0")) {
                         thread_1++;
                     }
-                    if (Thread.currentThread().getName().equals("ThreadPoolWorker-2")) {
+                    if (Thread.currentThread().getName().equals("ThreadPoolWorker-1")) {
                         thread_2++;
                     }
-                    if (Thread.currentThread().getName().equals("ThreadPoolWorker-3")) {
+                    if (Thread.currentThread().getName().equals("ThreadPoolWorker-2")) {
                         thread_3++;
                     }
                 }
             });
         }
-        Thread.sleep(20000);
-        pool.checkState();
+        Thread.sleep(10000);
+        System.out.println(thread_1);
+        System.out.println(thread_2);
+        System.out.println(thread_3);
+
         Assertions.assertEquals(100, thread_1 + thread_2 + thread_3);
     }
 

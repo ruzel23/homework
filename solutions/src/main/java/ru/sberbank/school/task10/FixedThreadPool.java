@@ -55,13 +55,6 @@ public class FixedThreadPool implements ThreadPool {
         }
     }
 
-    public void checkState() {
-        synchronized (threads) {
-            for(int i = 0; i < threads.length; i++) {
-                System.out.println(threads[i].getState());
-            }
-        }
-    }
 
     private class ThreadWorker extends Thread {
 

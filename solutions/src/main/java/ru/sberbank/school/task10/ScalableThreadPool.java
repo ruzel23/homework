@@ -6,13 +6,13 @@ public class ScalableThreadPool implements ThreadPool {
 
     private int minSize;
     private int maxSize;
-    private Deque<Thread> threads;
+    private ArrayList<Thread> threads;
     private Queue<Runnable> tasks;
 
     ScalableThreadPool(int minSize, int maxSize) {
         this.minSize = minSize;
         this.maxSize = maxSize;
-        threads = new LinkedList<>();
+        threads = new ArrayList<>();
         tasks = new LinkedList<>();
     }
 
@@ -22,8 +22,8 @@ public class ScalableThreadPool implements ThreadPool {
             throw new IllegalStateException("старт уже был произведен");
         }
         for (int i = 0; i < minSize; i++) {
-            threads.addLast(new ThreadWorker("ThreadPoolWorker-" + i));
-            threads.getLast().start();
+            threads.add(new ThreadWorker("ThreadPoolWorker-" + i));
+            threads.get(i).start();
         }
     }
 
@@ -42,9 +42,10 @@ public class ScalableThreadPool implements ThreadPool {
     public void execute(Runnable runnable) {
         synchronized (tasks) {
             synchronized (threads) {
-                if (!(tasks.isEmpty()) && (threads.size() > minSize && threads.size() < maxSize)) {
-                    threads.addLast(new ThreadWorker("ThreadPoolWorker-" + (threads.size() - 1)));
-                    threads.getLast().start();
+                if (!(tasks.isEmpty()) && threads.size() >= minSize && threads.size() < maxSize) {
+                    ThreadWorker threadWorker = new ThreadWorker("ThreadPoolWorker-" + threads.size());
+                    threads.add(threadWorker);
+                    threadWorker.start();
                 }
                 tasks.add(runnable);
                 tasks.notify();
@@ -61,26 +62,26 @@ public class ScalableThreadPool implements ThreadPool {
         @Override
         public void run() {
             Runnable taskRun;
-
-            synchronized (tasks) {
-                while (!Thread.currentThread().isInterrupted()) {
+            while (!Thread.currentThread().isInterrupted()) {
+                synchronized (tasks) {
                     if (tasks.isEmpty()) {
-                        synchronized (threads) {
-                            try {
-                                if (threads.size() > minSize) {
-                                    Thread.currentThread().interrupt();
-                                }
+                        try {
+                            if (threads.size() > minSize) {
+                                Thread.currentThread().interrupt();
+                                threads.remove(Thread.currentThread());
+                            } else {
                                 tasks.wait();
-                            } catch (InterruptedException ex) {
-                                ex.printStackTrace();
                             }
+                        } catch (InterruptedException ex) {
+
                         }
                     }
+                    taskRun = tasks.poll();
                 }
-                taskRun = tasks.poll();
-            }
-            if (taskRun != null) {
-                taskRun.run();
+                if (taskRun != null) {
+                    System.out.println(Thread.currentThread().getName());
+                    taskRun.run();
+                }
             }
         }
     }
