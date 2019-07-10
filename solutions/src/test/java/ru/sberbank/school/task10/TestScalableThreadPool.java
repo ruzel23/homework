@@ -5,11 +5,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
 
-public class TestScalableThreadPool {
+public class TestScalableThreadPool extends TestsThreadPool {
 
     private ScalableThreadPool pool;
-    private final Object lock = new Object();
-    private volatile int count;
+
 
     @Before
     public void initialize() {
@@ -19,20 +18,17 @@ public class TestScalableThreadPool {
 
     @Test
     public void checkRepeatStart() {
-        Assertions.assertThrows(IllegalStateException.class, () -> pool.start());
+        super.checkRepeatStart(pool);
     }
 
     @Test
     public void checkIncrement() throws InterruptedException {
-        for (int i = 0; i < 1000000; i++) {
-            pool.execute(() -> {
-                synchronized (lock) {
-                    count++;
-                }
-            });
-        }
-        Thread.sleep(3000);
-        Assertions.assertEquals(1000000, count);
+        super.checkIncrement(pool);
+    }
+
+    @Test
+    public void checkAdequacy() throws InterruptedException {
+        super.checkAdequacy(pool, 100000, 10000);
     }
 
     @After

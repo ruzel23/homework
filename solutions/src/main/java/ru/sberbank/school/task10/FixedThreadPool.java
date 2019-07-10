@@ -6,22 +6,17 @@ import java.util.Queue;
 public class FixedThreadPool implements ThreadPool {
 
     private Thread[] threads;
-    private Queue<Runnable> tasks;
+    private final Queue<Runnable> tasks;
     private boolean isEmpty;
 
     public FixedThreadPool(int sizeThreads) {
         if(sizeThreads <= 0) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("количество потоков не может быть <= нуля");
         }
         threads = new Thread[sizeThreads];
         tasks = new LinkedList<>();
         isEmpty = true;
     }
-
-    FixedThreadPool() {
-
-    }
-
 
     @Override
     public void start() {
@@ -58,7 +53,6 @@ public class FixedThreadPool implements ThreadPool {
     private boolean isEmpty() {
         return isEmpty;
     }
-
 
     private class ThreadWorker extends Thread {
 

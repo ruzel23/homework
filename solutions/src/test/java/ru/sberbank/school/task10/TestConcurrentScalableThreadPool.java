@@ -4,13 +4,13 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class TestConcurrentFixedThreadPool extends TestFixedThreadPool {
+public class TestConcurrentScalableThreadPool extends TestsThreadPool {
 
     private ThreadPool pool;
 
     @Before
     public void initialize() {
-        pool = new ConcurrentFixedThreadPool(3);
+        pool = new ConcurrentScalableThreadPool(3, 5);
         pool.start();
     }
 

@@ -1,15 +1,20 @@
 package ru.sberbank.school.task10;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class ScalableThreadPool implements ThreadPool {
 
     private int minSize;
     private int maxSize;
-    private ArrayList<Thread> threads;
-    private Queue<Runnable> tasks;
+    private final ArrayList<Thread> threads;
+    private final Queue<Runnable> tasks;
 
     ScalableThreadPool(int minSize, int maxSize) {
+        if (minSize <= 0 || minSize > maxSize) {
+            throw new IllegalArgumentException("некорректный ввод");
+        }
         this.minSize = minSize;
         this.maxSize = maxSize;
         threads = new ArrayList<>();
@@ -41,15 +46,13 @@ public class ScalableThreadPool implements ThreadPool {
     @Override
     public void execute(Runnable runnable) {
         synchronized (tasks) {
-            synchronized (threads) {
-                if (!(tasks.isEmpty()) && threads.size() >= minSize && threads.size() < maxSize) {
-                    ThreadWorker threadWorker = new ThreadWorker("ThreadPoolWorker-" + threads.size());
-                    threads.add(threadWorker);
-                    threadWorker.start();
-                }
-                tasks.add(runnable);
-                tasks.notify();
+            if (!(tasks.isEmpty()) && threads.size() >= minSize && threads.size() < maxSize) {
+                ThreadWorker additionalThread = new ThreadWorker("ThreadPoolWorker-" + threads.size());
+                threads.add(additionalThread);
+                additionalThread.start();
             }
+            tasks.add(runnable);
+            tasks.notify();
         }
     }
 
@@ -73,13 +76,12 @@ public class ScalableThreadPool implements ThreadPool {
                                 tasks.wait();
                             }
                         } catch (InterruptedException ex) {
-
+                            ex.printStackTrace();
                         }
                     }
                     taskRun = tasks.poll();
                 }
                 if (taskRun != null) {
-                    System.out.println(Thread.currentThread().getName());
                     taskRun.run();
                 }
             }

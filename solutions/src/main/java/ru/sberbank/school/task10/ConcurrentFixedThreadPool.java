@@ -1,7 +1,5 @@
 package ru.sberbank.school.task10;
 
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
@@ -13,7 +11,7 @@ public class ConcurrentFixedThreadPool implements ThreadPool {
 
     public ConcurrentFixedThreadPool(int sizeThreads) {
         if (sizeThreads <= 0) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("количество потоков не может быть <= нуля");
         }
 
         threads = new Thread[sizeThreads];
@@ -74,7 +72,7 @@ public class ConcurrentFixedThreadPool implements ThreadPool {
                     taskRun = tasks.take();
                     taskRun.run();
                 } catch (InterruptedException e) {
-                  //  e.printStackTrace();
+                    e.printStackTrace();
                 }
             }
         }
