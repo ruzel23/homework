@@ -23,7 +23,7 @@ public class SerializableRoute extends Serializer<Route<City>> {
     public Route<City> read(Kryo kryo, Input input, Class<? extends Route<City>> type) {
         Route<City> route = kryo.newInstance(type);
         route.setRouteName(input.readString());
-        route.setCities((List<City>) kryo.readObject(input, ArrayList.class));
+        route.setCities((List<City>) kryo.readObject(input, LinkedList.class));
         return route;
     }
 }

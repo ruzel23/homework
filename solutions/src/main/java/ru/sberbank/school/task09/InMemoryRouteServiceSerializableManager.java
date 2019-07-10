@@ -31,7 +31,6 @@ public class InMemoryRouteServiceSerializableManager extends RouteService<City, 
         kryo.register(ArrayList.class);
         kryo.register(LinkedList.class);
         kryo.register(LocalDate.class);
-        kryo.register(List.class);
     }
 
     @Override
