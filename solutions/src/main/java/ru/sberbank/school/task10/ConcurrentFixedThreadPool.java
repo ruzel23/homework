@@ -15,7 +15,7 @@ public class ConcurrentFixedThreadPool implements ThreadPool {
         }
 
         threads = new Thread[sizeThreads];
-        tasks = new ArrayBlockingQueue<>(sizeThreads);
+        tasks = new ArrayBlockingQueue<>(sizeThreads * 10);
         isEmpty = true;
     }
 

@@ -23,7 +23,7 @@ public class TestScalableThreadPool extends TestsThreadPool {
 
     @Test
     public void checkIncrement() throws InterruptedException {
-        super.checkIncrement(pool);
+        super.checkIncrement(pool, 1000000, 1000);
     }
 
     @Test

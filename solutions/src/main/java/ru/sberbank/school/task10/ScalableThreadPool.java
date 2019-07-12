@@ -46,7 +46,7 @@ public class ScalableThreadPool implements ThreadPool {
     @Override
     public void execute(Runnable runnable) {
         synchronized (tasks) {
-            if (!(tasks.isEmpty()) && threads.size() >= minSize && threads.size() < maxSize) {
+            if (tasks.size() != 0 && threads.size() < maxSize) {
                 ThreadWorker additionalThread = new ThreadWorker("ThreadPoolWorker-" + threads.size());
                 threads.add(additionalThread);
                 additionalThread.start();

@@ -21,12 +21,12 @@ public class TestConcurrentScalableThreadPool extends TestsThreadPool {
 
     @Test
     public void checkIncrement() throws InterruptedException {
-        super.checkIncrement(pool);
+        super.checkIncrement(pool, 1000000, 1000);
     }
 
     @Test
     public void checkAdequacy() throws InterruptedException {
-        super.checkAdequacy(pool, 0, 2000);
+        super.checkAdequacy(pool, 1000, 2000);
     }
 
     @After

@@ -20,16 +20,16 @@ class TestsThreadPool {
         Assertions.assertThrows(IllegalStateException.class, pool::start);
     }
 
-    void checkIncrement(ThreadPool pool) throws InterruptedException {
-        for (int i = 0; i < 1000000; i++) {
+    void checkIncrement(ThreadPool pool, int countTasks, int sleep) throws InterruptedException {
+        for (int i = 0; i < countTasks; i++) {
             pool.execute(() -> {
                 synchronized (lock) {
                     count++;
                 }
             });
         }
-        Thread.sleep(1000);
-        Assertions.assertEquals(1000000, count);
+        Thread.sleep(sleep);
+        Assertions.assertEquals(countTasks, count);
     }
 
      void checkAdequacy(ThreadPool pool, int countTasks, int sleep) throws InterruptedException {
