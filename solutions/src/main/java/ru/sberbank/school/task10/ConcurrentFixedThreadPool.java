@@ -36,11 +36,11 @@ public class ConcurrentFixedThreadPool implements ThreadPool {
     @Override
     public void stopNow() {
 
-            tasks.clear();
-            for (int i = 0; i < threads.length; i++) {
-                threads[i].interrupt();
-                threads[i] = null;
-            }
+        tasks.clear();
+        for (int i = 0; i < threads.length; i++) {
+            threads[i].interrupt();
+            threads[i] = null;
+        }
 
         isEmpty = true;
     }

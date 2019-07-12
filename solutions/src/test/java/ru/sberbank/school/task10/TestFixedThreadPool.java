@@ -28,7 +28,7 @@ public class TestFixedThreadPool extends TestsThreadPool {
 
     @Test
     public void checkAdequacy() throws InterruptedException {
-       super.checkAdequacy(pool, 1000, 2000);
+        super.checkAdequacy(pool, 1000, 2000);
     }
 
     @After

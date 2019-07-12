@@ -10,7 +10,7 @@ public class FixedThreadPool implements ThreadPool {
     private boolean isEmpty;
 
     public FixedThreadPool(int sizeThreads) {
-        if(sizeThreads <= 0) {
+        if (sizeThreads <= 0) {
             throw new IllegalArgumentException("количество потоков не может быть <= нуля");
         }
         threads = new Thread[sizeThreads];
@@ -71,7 +71,7 @@ public class FixedThreadPool implements ThreadPool {
                         try {
                             tasks.wait();
                         } catch (InterruptedException e) {
-
+                            e.printStackTrace();
                         }
                     }
                     taskRun = tasks.poll();

@@ -32,7 +32,7 @@ class TestsThreadPool {
         Assertions.assertEquals(countTasks, count);
     }
 
-     void checkAdequacy(ThreadPool pool, int countTasks, int sleep) throws InterruptedException {
+    void checkAdequacy(ThreadPool pool, int countTasks, int sleep) throws InterruptedException {
 
         for (int i = 0; i < countTasks; i++) {
             pool.execute(() -> {
