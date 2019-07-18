@@ -5,11 +5,10 @@ import ru.sberbank.school.task02.exception.WrongSymbolException;
 import ru.sberbank.school.task02.util.*;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class Client implements FxClientController {
 
@@ -66,8 +65,8 @@ public class Client implements FxClientController {
                     true);
         }
 
-        String price = response.get().setScale(2).toString();
-        amount.setScale(2);
+        String price = response.get().setScale(2, RoundingMode.HALF_DOWN).toString();
+        amount = amount.setScale(2, RoundingMode.HALF_DOWN);
 
         return new FxResponse(
                 symbol.getSymbol(),
@@ -102,8 +101,7 @@ public class Client implements FxClientController {
     }
 
     private String getDate() {
-        LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        return null;
+        return LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
 }

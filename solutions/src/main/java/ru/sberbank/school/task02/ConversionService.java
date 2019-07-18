@@ -26,9 +26,7 @@ public class ConversionService implements FxConversionService {
         if (amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException();
         }
-/*        if (amount.compareTo(BigDecimal.ZERO) == 0) {
-            return BigDecimal.ZERO;
-        }*/
+
         Quote quote = getQuote(symbol, amount);
         return getPrice(operation, quote);
     }

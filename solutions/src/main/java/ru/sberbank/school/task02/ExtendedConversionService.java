@@ -20,13 +20,10 @@ public class ExtendedConversionService extends ConversionService implements Exte
                                                 @NonNull BigDecimal amount,
                                                 @NonNull Beneficiary beneficiary) {
 
-        if (amount.compareTo(BigDecimal.ZERO) < 0) {
+        if (amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException();
         }
 
-        if (amount.compareTo(BigDecimal.ZERO) == 0) {
-            return Optional.of(BigDecimal.ZERO);
-        }
         List<BigDecimal> foundPrices = getPriceList(operation, symbol, amount);
         BigDecimal priceResult;
         if (foundPrices.isEmpty()) {
